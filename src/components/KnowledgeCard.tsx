@@ -14,7 +14,7 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({ unit }) => {
   
   const isCompleted = isUnitCompleted(unit.id);
   const completionRate = getUnitCompletionRate(unit.id);
-  const { completedCount, totalCount } = getUnitQuestionStats(unit.id);
+  const { completed, total } = getUnitQuestionStats(unit.id);
 
   return (
     <div 
@@ -38,7 +38,7 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({ unit }) => {
             style={{ width: `${completionRate}%`, backgroundColor: isCompleted ? 'var(--color-success)' : unit.color }}
           />
         </div>
-        <span className="progress-text">{completedCount}/{totalCount} 题</span>
+        <span className="progress-text">{completed}/{total} 题</span>
       </div>
       {isCompleted && (
         <div className="completed-badge animate-pulse">

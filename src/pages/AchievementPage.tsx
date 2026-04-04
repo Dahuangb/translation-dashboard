@@ -9,7 +9,6 @@ const AchievementPage: React.FC = () => {
   const { 
     progress, 
     resetProgress, 
-    isKnowledgePointCompleted,
     getCompletedQuestionCount,
     getTotalQuestionCount,
     getUnitQuestionStats

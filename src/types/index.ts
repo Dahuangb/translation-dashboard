@@ -54,5 +54,5 @@ export interface AppContextType {
   getTotalQuestionCount: () => number;
   getUnitQuestionStats: (unitId: string) => { completed: number; total: number };
   getKnowledgePointQuestionStats: (kpId: string) => { completed: number; total: number };
-  recordCompletion: (kpId: string, totalQuestions: number, correctQuestions: number) => void;
+  recordCompletion: (kpId: string) => void;
 }

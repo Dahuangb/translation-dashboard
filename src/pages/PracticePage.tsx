@@ -42,7 +42,7 @@ const PracticePage: React.FC = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setFinalCorrectCountToShow(newCorrectCount);
-      recordCompletion(kp.id, questions.length, newCorrectCount);
+      recordCompletion(kp.id);
       setShowCompletion(true);
     }
   };

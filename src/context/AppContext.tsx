@@ -62,7 +62,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
-  const recordCompletion = (kpId: string, totalQuestions: number, correctQuestions: number) => {
+  const recordCompletion = (kpId: string) => {
     // 这个函数现在主要是为了保持 API 兼容，实际的完成逻辑在 completeQuestion 中处理
     // 这里我们用 completeKnowledgePointAllQuestions 来确保知识点被标记为完成
     const newProgress = completeKnowledgePointAllQuestions(kpId, progress);
