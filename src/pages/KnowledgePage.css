@@ -1,0 +1,342 @@
+.knowledge-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  background: var(--color-sky-blue);
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  transform: translateX(-3px);
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+.page-title {
+  font-size: 2rem;
+  color: var(--color-text);
+}
+
+.knowledge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.knowledge-item {
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.knowledge-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.knowledge-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.knowledge-item:hover::before {
+  opacity: 1;
+}
+
+.kp-completed {
+  background: linear-gradient(135deg, #E8F8F0 0%, #FFFFFF 100%);
+  border: 2px solid var(--color-success);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.2);
+}
+
+.kp-completed:hover {
+  box-shadow: 0 10px 35px rgba(46, 204, 113, 0.3);
+}
+
+.kp-corner-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: linear-gradient(135deg, var(--color-success), #27AE60);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0 0 0 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+  z-index: 10;
+  animation: slideInFromTopRight 0.5s ease-out;
+}
+
+@keyframes slideInFromTopRight {
+  0% {
+    opacity: 0;
+    transform: translate(20px, -20px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.kp-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.kp-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.kp-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.kp-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.kp-title {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  margin-bottom: 0.3rem;
+}
+
+.kp-completed .kp-title {
+  color: var(--color-success);
+}
+
+.kp-desc {
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+.kp-completed-time {
+  font-size: 0.9rem;
+  color: var(--color-success);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.kp-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.kp-status-badge.completed {
+  background: linear-gradient(135deg, var(--color-success), #27AE60);
+  color: white;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.kp-status-badge.in-progress {
+  background: linear-gradient(135deg, var(--color-warm-orange), #F39C12);
+  color: var(--color-text);
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+}
+
+.status-icon {
+  font-size: 1.2rem;
+}
+
+.kp-progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.kp-progress-bar {
+  flex: 1;
+  height: 10px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.kp-progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.kp-progress-fill-completed {
+  background: linear-gradient(90deg, var(--color-success), #27AE60) !important;
+  animation: progressGlow 2s ease-in-out infinite;
+}
+
+@keyframes progressGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.8);
+  }
+}
+
+.kp-progress-text {
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+  font-weight: 600;
+  min-width: 70px;
+  text-align: right;
+}
+
+.kp-content {
+  margin-bottom: 1.5rem;
+}
+
+.kp-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.kp-point {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  line-height: 1.6;
+  padding: 0.5rem 1rem;
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
+.kp-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.practice-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  background: var(--color-cute-pink);
+  color: white;
+}
+
+.practice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.practice-btn-completed {
+  background: linear-gradient(135deg, var(--color-success), #27AE60);
+}
+
+.practice-btn-completed:hover {
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+.not-found {
+  text-align: center;
+  padding: 4rem;
+}
+
+.not-found p {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+}
+
+.not-found a {
+  color: var(--color-sky-blue);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .knowledge-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .knowledge-item {
+    padding: 1.5rem;
+  }
+
+  .kp-header {
+    flex-wrap: wrap;
+  }
+
+  .kp-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.6rem;
+  }
+
+  .kp-title {
+    font-size: 1.2rem;
+  }
+
+  .kp-status-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .kp-actions {
+    flex-direction: column;
+  }
+
+  .practice-btn,
+  .mark-done-btn {
+    width: 100%;
+  }
+}

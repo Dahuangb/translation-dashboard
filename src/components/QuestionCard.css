@@ -1,0 +1,217 @@
+.question-card {
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.celebration-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.celebration-star {
+  position: absolute;
+  font-size: 2rem;
+  animation: celebrate 1s ease-out forwards;
+}
+
+.star-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.star-2 {
+  top: 10%;
+  left: 50%;
+  animation-delay: 0.1s;
+}
+
+.star-3 {
+  top: 30%;
+  right: 15%;
+  animation-delay: 0.2s;
+}
+
+.star-4 {
+  bottom: 30%;
+  left: 20%;
+  animation-delay: 0.15s;
+}
+
+.star-5 {
+  bottom: 20%;
+  right: 10%;
+  animation-delay: 0.25s;
+}
+
+@keyframes celebrate {
+  0% {
+    opacity: 1;
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(360deg) translateY(-50px);
+  }
+}
+
+.question-text {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.option-btn {
+  background: var(--color-background);
+  border: 2px solid #e0e0e0;
+  border-radius: 15px;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--color-sky-blue);
+  background: rgba(78, 205, 196, 0.1);
+}
+
+.option-btn.selected {
+  border-color: var(--color-sky-blue);
+  background: rgba(78, 205, 196, 0.2);
+}
+
+.option-btn.correct {
+  border-color: var(--color-success);
+  background: rgba(46, 204, 113, 0.2);
+  color: var(--color-success);
+}
+
+.option-btn.wrong {
+  border-color: var(--color-error);
+  background: rgba(231, 76, 60, 0.2);
+  color: var(--color-error);
+  animation: shake 0.3s ease-in-out;
+}
+
+.result-message {
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.result-message.success {
+  background: rgba(46, 204, 113, 0.15);
+  border: 2px solid var(--color-success);
+}
+
+.result-message.error {
+  background: rgba(231, 76, 60, 0.15);
+  border: 2px solid var(--color-error);
+}
+
+.result-icon {
+  font-size: 3rem;
+}
+
+.result-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.explanation {
+  font-size: 1rem;
+  color: var(--color-text-light);
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.question-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.check-btn,
+.next-btn {
+  padding: 1rem 3rem;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.check-btn {
+  background: var(--color-sky-blue);
+  color: var(--color-white);
+}
+
+.check-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.check-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next-btn {
+  background: var(--color-warm-orange);
+  color: var(--color-text);
+}
+
+.next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 230, 109, 0.4);
+}
+
+@media (max-width: 768px) {
+  .question-card {
+    padding: 1.5rem;
+  }
+
+  .question-text {
+    font-size: 1.2rem;
+  }
+
+  .option-btn {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+  }
+
+  .check-btn,
+  .next-btn {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,17 @@
+:root {
+  --color-sky-blue: #4ECDC4;
+  --color-warm-orange: #FFE66D;
+  --color-cute-pink: #FF6B6B;
+  --color-fresh-green: #95E1D3;
+  --color-light-purple: #A8E6CF;
+  --color-soft-blue: #88D8B0;
+  
+  --color-background: #FFFDF5;
+  --color-text: #2C3E50;
+  --color-text-light: #5A6C7D;
+  --color-white: #FFFFFF;
+  
+  --color-success: #2ECC71;
+  --color-error: #E74C3C;
+  --color-warning: #F39C12;
+}

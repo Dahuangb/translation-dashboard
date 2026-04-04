@@ -1,0 +1,135 @@
+.home-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  animation: bounce 0.8s ease-out;
+}
+
+.hero-subtitle {
+  font-size: 1.4rem;
+  color: var(--color-text-light);
+}
+
+.completed-section,
+.in-progress-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.section-icon {
+  font-size: 2rem;
+}
+
+.completed-count {
+  font-size: 1.2rem;
+  color: var(--color-success);
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.completed-section .section-title {
+  color: var(--color-success);
+}
+
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.all-completed-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #E8F8F0 0%, #FFFFFF 100%);
+  border-radius: 25px;
+  border: 3px solid var(--color-success);
+  box-shadow: 0 8px 30px rgba(46, 204, 113, 0.2);
+}
+
+.all-completed-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  animation: bounce 0.8s ease-out;
+}
+
+.all-completed-text {
+  font-size: 1.8rem;
+  color: var(--color-success);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.all-completed-subtext {
+  font-size: 1.3rem;
+  color: var(--color-text-light);
+}
+
+@media (max-width: 768px) {
+  .home-page {
+    padding: 2rem 1rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .section-icon {
+    font-size: 1.6rem;
+  }
+
+  .completed-count {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .units-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .all-completed-message {
+    padding: 3rem 1.5rem;
+  }
+
+  .all-completed-icon {
+    font-size: 4rem;
+  }
+
+  .all-completed-text {
+    font-size: 1.4rem;
+  }
+
+  .all-completed-subtext {
+    font-size: 1.1rem;
+  }
+}

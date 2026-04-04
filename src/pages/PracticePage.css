@@ -1,0 +1,167 @@
+.practice-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.practice-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  background: var(--color-sky-blue);
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  transform: translateX(-3px);
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+.practice-info {
+  flex: 1;
+}
+
+.practice-title {
+  font-size: 1.8rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.practice-progress {
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+}
+
+.current-score {
+  color: var(--color-success);
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+.completion-modal {
+  background: var(--color-white);
+  border-radius: 25px;
+  padding: 3rem 2rem;
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.completion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.completion-icon {
+  font-size: 5rem;
+  animation: bounce 0.6s ease-out;
+}
+
+.completion-title {
+  font-size: 2rem;
+  color: var(--color-text);
+  background: linear-gradient(135deg, var(--color-sky-blue), var(--color-cute-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.completion-stats {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  font-weight: bold;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--color-warm-orange), #F39C12);
+  border-radius: 15px;
+  color: var(--color-text);
+}
+
+.completion-message {
+  font-size: 1.2rem;
+  color: var(--color-text-light);
+}
+
+.completion-btn {
+  background: linear-gradient(135deg, var(--color-success), #27AE60);
+  color: white;
+  padding: 1rem 3rem;
+  border-radius: 25px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+
+.completion-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.5);
+}
+
+.not-found {
+  text-align: center;
+  padding: 4rem;
+}
+
+.not-found p {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+}
+
+.not-found button {
+  background: var(--color-sky-blue);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .practice-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .practice-header {
+    flex-direction: column;
+  }
+
+  .practice-title {
+    font-size: 1.4rem;
+  }
+
+  .completion-modal {
+    padding: 2rem 1.5rem;
+  }
+
+  .completion-icon {
+    font-size: 4rem;
+  }
+
+  .completion-title {
+    font-size: 1.6rem;
+  }
+
+  .completion-stats {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .completion-btn {
+    padding: 0.9rem 2.5rem;
+    font-size: 1.1rem;
+  }
+}
