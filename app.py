@@ -308,36 +308,36 @@ st.markdown(
     .case-body {{
         padding: 18px;
     }}
-    .case-grid {
+    .case-grid {{
         display: flex;
         flex-direction: column;
         gap: 16px;
-    }
-    @media (min-width: 768px) {
-        .case-grid {
+    }}
+    @media (min-width: 768px) {{
+        .case-grid {{
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-        }
-    }
-    .case-grid-vertical {
+        }}
+    }}
+    .case-grid-vertical {{
         display: flex;
         flex-direction: column;
         gap: 16px;
-    }
-    .case-text-scrollable {
+    }}
+    .case-text-scrollable {{
         max-height: 250px;
         overflow-y: auto;
         padding-right: 8px;
-    }
+    }}
     /* 自定义滚动条样式 */
-    .case-text-scrollable::-webkit-scrollbar {
+    .case-text-scrollable::-webkit-scrollbar {{
         width: 6px;
-    }
-    .case-text-scrollable::-webkit-scrollbar-thumb {
+    }}
+    .case-text-scrollable::-webkit-scrollbar-thumb {{
         background-color: #D1D5DB;
         border-radius: 4px;
-    }
+    }}
     .case-label {{
         font-size: 13px;
         color: {GRAY_MID};
