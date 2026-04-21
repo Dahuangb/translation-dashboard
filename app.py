@@ -221,7 +221,7 @@ st.markdown(
     .section-header {{
         margin: 28px 0 12px 0;
     }}
-    .risk-card {
+    .risk-card {{
         background: #ffffff;
         border-radius: 12px;
         padding: 18px 20px;
@@ -296,13 +296,13 @@ st.markdown(
         color: {GRAY_TEXT};
         line-height: 1.6;
     }}
-    .risk-title {
+    .risk-title {{
         font-size: 16px;
         font-weight: 700;
         color: {GRAY_DARK};
         margin-bottom: 8px;
-    }
-    .risk-text {
+    }}
+    .risk-text {{
         font-size: 14px;
         color: {GRAY_TEXT};
         line-height: 1.6;
