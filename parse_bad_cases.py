@@ -87,6 +87,17 @@ def parse_attribution(raw_attr: str):
     return sorted(set(patterns)) or ["未分类"]
 
 
+def clean_object_id(obj_id: str) -> str:
+    if not obj_id:
+        return ""
+    obj_id = str(obj_id).strip()
+    if "e+" in obj_id.lower():
+        try:
+            return str(int(float(obj_id)))
+        except Exception:
+            return obj_id
+    return obj_id
+
 def build_case(row: dict, translation_model: str):
     risk_list = parse_json_field(row.get("risk_list", ""), [])
     risk_agent_output = parse_json_field(row.get("risk_agent_output", ""), {})
@@ -97,8 +108,18 @@ def build_case(row: dict, translation_model: str):
     source_fields = sorted({item.get("source_field", "未知") for item in risk_list if item.get("source_field")})
     
     # Retrieve market info
-    object_id = row.get("object_id", "")
-    market = OBJECT_MARKET_MAP.get(str(object_id), "未知")
+    object_id_raw = row.get("object_id", "")
+    object_id = clean_object_id(object_id_raw)
+    
+    # Try exact match first, then prefix match as fallback for scientific notation loss of precision
+    market = OBJECT_MARKET_MAP.get(object_id)
+    if not market and len(object_id) >= 15:
+        prefix = object_id[:15]
+        for k, v in OBJECT_MARKET_MAP.items():
+            if k.startswith(prefix):
+                market = v
+                break
+    market = market or "未知"
 
     languages = sorted({item.get("language", "未知") for item in violations if item.get("language")}) or ["未知"]
     trigger_texts = [item.get("source_expression", "") for item in risk_list if item.get("source_expression")]
