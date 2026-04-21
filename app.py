@@ -850,7 +850,7 @@ st.markdown(
 <div class="section-header">
     <div class="scope-tag scope-tag-deepdive">多模型深挖</div>
     <div class="section-title">翻译模型案例检索台</div>
-    <div class="section-desc">这里已接入多模型 bad-case 数据。先选择翻译模型，再在该模型案例子集里按失败裁判、风险类型、来源字段、语言和关键词筛选。</div>
+    <div class="section-desc">这里已接入多模型 bad-case 数据。先选择翻译模型，再在该模型案例子集里按失败裁判、风险类型、来源字段、市场和关键词筛选。</div>
 </div>
 """,
     unsafe_allow_html=True,
@@ -892,13 +892,11 @@ with case_filter_cols[4]:
         key="case_source_field",
     )
 with case_filter_cols[5]:
-    case_language = st.selectbox(
-        "案例语言",
-        ["全部"] + bad_case_filters["languages"],
-        index=(["全部"] + bad_case_filters["languages"]).index(default_language)
-        if default_language in bad_case_filters["languages"]
-        else 0,
-        key="case_language",
+    case_market = st.selectbox(
+        "所属市场",
+        ["全部"] + bad_case_filters.get("markets", ["未知"]),
+        index=0,
+        key="case_market",
     )
 with case_filter_cols[6]:
     case_keyword = st.text_input(
@@ -933,9 +931,9 @@ if case_source_field != "全部":
     filtered_bad_case_df = filtered_bad_case_df[
         filtered_bad_case_df["source_fields"].apply(lambda items: case_source_field in items)
     ]
-if case_language != "全部":
+if case_market != "全部":
     filtered_bad_case_df = filtered_bad_case_df[
-        filtered_bad_case_df["languages"].apply(lambda items: case_language in items)
+        filtered_bad_case_df["market"] == case_market
     ]
 if case_has_fn:
     filtered_bad_case_df = filtered_bad_case_df[
@@ -1002,8 +1000,8 @@ else:
     case_lookup = {}
     for idx, record in enumerate(display_records):
         label = (
-            f"{idx + 1:02d}. {record['primary_error_pattern']} | {record['primary_risk_type']} | "
-            f"{record['primary_source_field']} | {record['primary_language']} | "
+            f"{idx + 1:02d}. {record.get('primary_error_pattern', '未分类')} | {record.get('primary_risk_type', '未知')} | "
+            f"{record.get('primary_source_field', '未知')} | {record.get('market', '未知')} | "
             f"{str(record['object_id'])[-6:]}"
         )
         case_options.append(label)
@@ -1030,9 +1028,9 @@ else:
     selected_record = case_lookup[selected_case_label]
     selected_meta = [
         selected_record["failed_scope"],
-        selected_record["primary_risk_type"],
-        selected_record["primary_source_field"],
-        selected_record["primary_language"],
+        selected_record.get("primary_risk_type", "未知"),
+        selected_record.get("primary_source_field", "未知"),
+        selected_record.get("market", "未知"),
         f"ID {selected_record['object_id']}",
     ]
     selected_patterns = "".join(

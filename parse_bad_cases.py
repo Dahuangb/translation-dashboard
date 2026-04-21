@@ -4,6 +4,10 @@ from pathlib import Path
 
 
 ROOT = Path("/Users/bytedance/Desktop/trae_roject/dahuang_test")
+MARKET_CSV_PATH = Path("/Users/bytedance/Downloads/march_train_set.csv")
+
+# Global mapping for object_id -> market
+OBJECT_MARKET_MAP = {}
 SOURCES = {
     "Gemini-3.1-Pro": ROOT / "translation_bad_cases_analysis_gemini3.1_pro.csv",
     "GPT-4.1-mini": ROOT / "translation_bad_cases_analysis_gpt4.1_mini.csv",
@@ -91,6 +95,11 @@ def build_case(row: dict, translation_model: str):
     failed_judges, failed_scope = normalize_failed_model(row.get("failed_model", ""))
     risk_types = sorted({item.get("risk_type", "未知") for item in risk_list if item.get("risk_type")})
     source_fields = sorted({item.get("source_field", "未知") for item in risk_list if item.get("source_field")})
+    
+    # Retrieve market info
+    object_id = row.get("object_id", "")
+    market = OBJECT_MARKET_MAP.get(str(object_id), "未知")
+
     languages = sorted({item.get("language", "未知") for item in violations if item.get("language")}) or ["未知"]
     trigger_texts = [item.get("source_expression", "") for item in risk_list if item.get("source_expression")]
     inaccurate_reason = row.get("inaccurate_reason", "")
@@ -98,7 +107,8 @@ def build_case(row: dict, translation_model: str):
     error_patterns = parse_attribution(attribution_raw)
 
     return {
-        "object_id": row.get("object_id", ""),
+        "object_id": object_id,
+        "market": market,
         "translation_model": translation_model,
         "failed_judges": failed_judges,
         "failed_scope": failed_scope,
@@ -131,6 +141,7 @@ def build_case(row: dict, translation_model: str):
 def build_payload(cases: list, translation_model: str):
     risk_types = sorted({risk for case in cases for risk in case["risk_types"]})
     source_fields = sorted({field for case in cases for field in case["source_fields"]})
+    markets = sorted({case.get("market", "未知") for case in cases})
     languages = sorted({lang for case in cases for lang in case["languages"]})
     error_patterns = sorted(
         {pattern for case in cases for pattern in case["error_patterns"]},
@@ -146,6 +157,7 @@ def build_payload(cases: list, translation_model: str):
                 "failed_scope": failed_scopes,
                 "risk_types": risk_types,
                 "source_fields": source_fields,
+                "markets": markets,
                 "languages": languages,
                 "error_patterns": error_patterns,
             },
@@ -160,7 +172,23 @@ def load_cases(csv_path: Path, translation_model: str):
     return [build_case(row, translation_model) for row in rows]
 
 
+def load_market_mapping():
+    try:
+        with MARKET_CSV_PATH.open("r", encoding="utf-8-sig") as f:
+            content = f.read().replace('\x00', '')
+            import io
+            reader = csv.DictReader(io.StringIO(content))
+            for row in reader:
+                obj_id = row.get("object_id")
+                market = row.get("market")
+                if obj_id and market:
+                    OBJECT_MARKET_MAP[str(obj_id)] = market
+        print(f"Loaded market mapping for {len(OBJECT_MARKET_MAP)} objects.")
+    except Exception as e:
+        print(f"Failed to load market mapping: {e}")
+
 def main():
+    load_market_mapping()
     all_cases = []
     model_summaries = []
 
