@@ -114,7 +114,9 @@ stability_df = (
     .agg(max_recall="max", min_recall="min", mean_recall="mean")
 )
 stability_df["波动"] = stability_df["max_recall"] - stability_df["min_recall"]
-stability_df["稳定性评分"] = 100 - stability_df["波动"]
+most_stable = stability_df.loc[stability_df["波动"].idxmin()]
+least_stable = stability_df.loc[stability_df["波动"].idxmax()]
+
 stability_df = stability_df.set_index("model").reindex(MODEL_ORDER).reset_index()
 winner_stability = stability_df[stability_df["model"] == winner].iloc[0]
 
@@ -436,6 +438,34 @@ st.markdown(
 
 
 # ==============================================================================
+# Dynamic Smart Insights Generation
+# ==============================================================================
+# Determine SOTA and runner-up
+sorted_overall = overall_df.sort_values("综合口径", ascending=False)
+sota_model = sorted_overall.iloc[0]["model"]
+runner_up_model = sorted_overall.iloc[1]["model"]
+sota_score = sorted_overall.iloc[0]["综合口径"]
+runner_up_score = sorted_overall.iloc[1]["综合口径"]
+score_gap = sota_score - runner_up_score
+
+# Determine MQM winner
+mqm_winner = mqm_df.sort_values("平均 MQM", ascending=False).iloc[0]["model"]
+mqm_winner_score = mqm_df.sort_values("平均 MQM", ascending=False).iloc[0]["平均 MQM"]
+
+# Generate dynamic Hero conclusion
+num_languages = len(lang_df["language"].unique())
+if sota_model == mqm_winner:
+    hero_insight = f"基于当前 {num_languages} 个语言市场与本轮评测集，<b>{sota_model}</b> 在风险召回（{sota_score:.1f}%）和翻译质量（MQM {mqm_winner_score:.1f}）上均拔得头筹，领先第二名 {runner_up_model} 约 {score_gap:.1f} 个点，当前最适合作为优先候选。"
+else:
+    hero_insight = f"基于当前 {num_languages} 个语言市场与本轮评测集，<b>{sota_model}</b> 在综合风险召回上以 {sota_score:.1f}% 领先（超越第二名 {runner_up_model} {score_gap:.1f} 个点）。虽然翻译质量最高的是 {mqm_winner}（MQM {mqm_winner_score:.1f}），但综合安全与质量，{sota_model} 仍是当前优先候选。"
+
+# Generate dynamic MQM conclusion
+if sota_model == mqm_winner:
+    mqm_insight = f"结论：{sota_model} 不仅在召回率上领先，在正确命中样本上的翻译质量（MQM {mqm_winner_score:.1f}）也傲视群雄。"
+else:
+    mqm_insight = f"结论：虽然 {mqm_winner} 的平均 MQM 最高（{mqm_winner_score:.1f}），但 {sota_model} 在保持最高风险召回率的同时，翻译质量也达到了极高的水准。"
+
+# ==============================================================================
 # Sidebar Navigation
 # ==============================================================================
 st.sidebar.markdown(
@@ -459,16 +489,13 @@ st.sidebar.markdown(
 st.markdown('<div id="hero-section"></div>', unsafe_allow_html=True)
 
 metric_cols = st.columns(4)
-hero_subtitle = (
-    f"基于当前 5 个语言市场与本轮评测集，{winner} 在风险召回、翻译质量和语种稳定性上综合领先，当前更适合作为优先候选。"
-)
 
 st.markdown(
     f"""
 <div class="hero-card">
     <div class="status-tag">当前建议：优先候选</div>
     <div class="hero-title">翻译模型评估结论</div>
-    <div class="hero-subtitle">{hero_subtitle}</div>
+    <div class="hero-subtitle">{hero_insight}</div>
 </div>
 """,
     unsafe_allow_html=True,
@@ -642,7 +669,7 @@ with overview_cols[1]:
 
 st.markdown(
     f"""
-<div class="small-note">结论：{winner} 不只在召回率最高，在正确命中样本上的翻译质量也最稳。</div>
+<div class="small-note">{mqm_insight}</div>
 """,
     unsafe_allow_html=True,
 )
@@ -653,7 +680,7 @@ st.markdown(
     """
 <div class="section-header">
     <div class="section-title">跨语种稳定性</div>
-    <div class="section-desc">重点不是某一个语种偶然跑得高，而是不同语言市场里是否持续稳定、不掉链子。稳定性评分仅作为辅助观察指标，计算方式为 100 - 语种召回波动。</div>
+    <div class="section-desc">重点不是某一个语种偶然跑得高，而是不同语言市场里是否持续稳定、不掉链子。这里通过对比各模型在不同语种间的最大波动来衡量稳定性。</div>
 </div>
 """,
     unsafe_allow_html=True,
@@ -670,8 +697,8 @@ stability_copy = [
         f"四个模型平均召回率仅 {fmt_pct(worst_language_row['平均召回率'])}",
     ),
     (
-        f"{winner} 辅助观察指标：稳定性评分",
-        f"{fmt_num(winner_stability['稳定性评分'])}，计算方式为 100 - 波动；当前跨语种波动 {fmt_num(winner_stability['波动'])}",
+        f"跨语种表现最稳模型：{most_stable['model']}",
+        f"最大波动仅 {fmt_num(most_stable['波动'])}%，而波动最大的 {least_stable['model']} 高达 {fmt_num(least_stable['波动'])}%",
     ),
 ]
 for col, (title, text) in zip(stability_cards, stability_copy):
