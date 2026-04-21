@@ -200,10 +200,14 @@ def load_market_mapping():
             import io
             reader = csv.DictReader(io.StringIO(content))
             for row in reader:
-                obj_id = row.get("object_id")
                 market = row.get("market")
-                if obj_id and market:
-                    OBJECT_MARKET_MAP[str(obj_id)] = market
+                if not market:
+                    continue
+                # Map multiple ID columns to the same market
+                for id_col in ["object_id", "real_object_id", "final_object_id", "task_id"]:
+                    val = row.get(id_col)
+                    if val and val != "NULL":
+                        OBJECT_MARKET_MAP[str(val)] = market
         print(f"Loaded market mapping for {len(OBJECT_MARKET_MAP)} objects.")
     except Exception as e:
         print(f"Failed to load market mapping: {e}")
