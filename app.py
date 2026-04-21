@@ -1038,6 +1038,15 @@ else:
     )
 
     with browser_cols[1]:
+        raw_reason = selected_record.get("inaccurate_reason", "无") or "无"
+        reasons = [r.strip() for r in str(raw_reason).split("|") if r.strip()]
+        
+        if len(reasons) > 1:
+            reason_html = "".join([f"<li>{to_html_text(r)}</li>" for r in reasons])
+            reason_display = f"<ul style='margin-top: 4px; padding-left: 20px; line-height: 1.6;'>{reason_html}</ul>"
+        else:
+            reason_display = f"<div style='margin-top: 4px; line-height: 1.6;'>{to_html_text(reasons[0]) if reasons else '无'}</div>"
+
         st.markdown(
             f"""
 <div class="case-card">
@@ -1056,7 +1065,7 @@ else:
             </div>
             <div>
                 <div class="case-label">误译原因</div>
-                <div class="case-text">{to_html_text(selected_record["inaccurate_reason"])}</div>
+                <div class="case-text">{reason_display}</div>
             </div>
         </div>
         <div class="case-strip">案例判断：{to_html_text(selected_record["overall_case_assessment"] or "该案例未提供额外总体判断。")}</div>
