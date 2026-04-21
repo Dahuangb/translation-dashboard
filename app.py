@@ -1041,7 +1041,27 @@ else:
         raw_reason = selected_record.get("inaccurate_reason", "无") or "无"
         reasons = [r.strip() for r in str(raw_reason).split("|") if r.strip()]
         
-        if len(reasons) > 1:
+        if selected_record.get("failed_scope") == "双裁判" and len(reasons) > 1 and len(reasons) % 2 == 0:
+            mid = len(reasons) // 2
+            gemini_reasons = reasons[:mid]
+            gpt_reasons = reasons[mid:]
+            
+            gemini_html = "".join([f"<li>{to_html_text(r)}</li>" for r in gemini_reasons])
+            gpt_html = "".join([f"<li>{to_html_text(r)}</li>" for r in gpt_reasons])
+            
+            reason_display = f"""
+                <div style='margin-top: 4px; font-weight: 500; font-size: 13px; color: #10B981;'>Gemini 评价</div>
+                <ul style='margin-top: 4px; padding-left: 20px; line-height: 1.6;'>
+                    {gemini_html}
+                </ul>
+                <details style='margin-top: 12px; cursor: pointer; color: #6B7280; font-size: 13px; background-color: #F3F4F6; padding: 8px; border-radius: 6px;'>
+                    <summary style='outline: none; font-weight: 500;'>▶ 查看 GPT-5 补充评价</summary>
+                    <ul style='margin-top: 8px; padding-left: 20px; line-height: 1.6; color: #4B5563; margin-bottom: 0;'>
+                        {gpt_html}
+                    </ul>
+                </details>
+            """
+        elif len(reasons) > 1:
             reason_html = "".join([f"<li>{to_html_text(r)}</li>" for r in reasons])
             reason_display = f"<ul style='margin-top: 4px; padding-left: 20px; line-height: 1.6;'>{reason_html}</ul>"
         else:
