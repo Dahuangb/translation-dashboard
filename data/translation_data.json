@@ -1,0 +1,288 @@
+{
+    "winner": "Gemini-3-Flash",
+    "risk_summary": "推荐上线",
+    "key_takeaway": [
+        "召回率最高",
+        "多语种更稳",
+        "致命漏翻最少"
+    ],
+    "overall_performance": [
+        {
+            "model": "Gemini-3-Flash",
+            "gpt5_recall": 88.47,
+            "gemini_recall": 92.26
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "gpt5_recall": 81.95,
+            "gemini_recall": 87.02
+        },
+        {
+            "model": "CLA",
+            "gpt5_recall": 78.44,
+            "gemini_recall": 83.07
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "gpt5_recall": 55.41,
+            "gemini_recall": 60.40
+        }
+    ],
+    "mqm_breakdown": [
+        {
+            "model": "Gemini-3-Flash",
+            "tp": 98.2,
+            "fn": 87.0,
+            "fp": 78.4,
+            "avg": 99.4
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "tp": 96.9,
+            "fn": 85.5,
+            "fp": 76.4,
+            "avg": 98.2
+        },
+        {
+            "model": "CLA",
+            "tp": 96.2,
+            "fn": 85.7,
+            "fp": 80.8,
+            "avg": 97.5
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "tp": 94.6,
+            "fn": 78.1,
+            "fp": 77.7,
+            "avg": 97.2
+        }
+    ],
+    "leaderboard": [
+        {
+            "model": "Gemini-3-Flash",
+            "recall": 92.51,
+            "mqm": 99.4,
+            "precision": 99.82,
+            "main_error": "错译",
+            "worst_language": "PL",
+            "stability_gap": 3.21
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "recall": 87.02,
+            "mqm": 98.2,
+            "precision": 99.93,
+            "main_error": "错译",
+            "worst_language": "PT",
+            "stability_gap": 9.72
+        },
+        {
+            "model": "CLA",
+            "recall": 83.07,
+            "mqm": 97.5,
+            "precision": 99.42,
+            "main_error": "未翻译",
+            "worst_language": "PT",
+            "stability_gap": 5.72
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "recall": 60.4,
+            "mqm": 97.2,
+            "precision": 93.73,
+            "main_error": "漏翻",
+            "worst_language": "PL",
+            "stability_gap": 10.21
+        }
+    ],
+    "language_performance": [
+        {
+            "model": "Gemini-3-Flash",
+            "language": "DE",
+            "recall": 94.27,
+            "mqm": 99.6
+        },
+        {
+            "model": "Gemini-3-Flash",
+            "language": "IT",
+            "recall": 92.22,
+            "mqm": 99.6
+        },
+        {
+            "model": "Gemini-3-Flash",
+            "language": "PT",
+            "recall": 92.31,
+            "mqm": 99.4
+        },
+        {
+            "model": "Gemini-3-Flash",
+            "language": "FR",
+            "recall": 91.39,
+            "mqm": 99.4
+        },
+        {
+            "model": "Gemini-3-Flash",
+            "language": "PL",
+            "recall": 91.06,
+            "mqm": 99.3
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "language": "DE",
+            "recall": 90.35,
+            "mqm": 99.3
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "language": "IT",
+            "recall": 87.17,
+            "mqm": 99.3
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "language": "FR",
+            "recall": 87.8,
+            "mqm": 99.2
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "language": "PL",
+            "recall": 86.54,
+            "mqm": 99.0
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "language": "PT",
+            "recall": 80.63,
+            "mqm": 98.7
+        },
+        {
+            "model": "CLA",
+            "language": "DE",
+            "recall": 86.4,
+            "mqm": 99.1
+        },
+        {
+            "model": "CLA",
+            "language": "PL",
+            "recall": 83.82,
+            "mqm": 98.8
+        },
+        {
+            "model": "CLA",
+            "language": "IT",
+            "recall": 82.44,
+            "mqm": 99.1
+        },
+        {
+            "model": "CLA",
+            "language": "PT",
+            "recall": 80.68,
+            "mqm": 98.6
+        },
+        {
+            "model": "CLA",
+            "language": "FR",
+            "recall": 81.15,
+            "mqm": 98.7
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "language": "DE",
+            "recall": 65.86,
+            "mqm": 98.0
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "language": "IT",
+            "recall": 61.46,
+            "mqm": 98.2
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "language": "FR",
+            "recall": 61.33,
+            "mqm": 97.9
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "language": "PL",
+            "recall": 55.65,
+            "mqm": 97.4
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "language": "PT",
+            "recall": 55.88,
+            "mqm": 97.5
+        }
+    ],
+    "error_distribution": [
+        {
+            "model": "Gemini-3-Flash",
+            "错译": 452,
+            "未翻译": 164,
+            "和谐": 144,
+            "漏翻": 93,
+            "捏造": 7
+        },
+        {
+            "model": "GPT-4.1-mini",
+            "错译": 792,
+            "和谐": 285,
+            "未翻译": 190,
+            "漏翻": 86,
+            "捏造": 6
+        },
+        {
+            "model": "CLA",
+            "未翻译": 759,
+            "错译": 665,
+            "漏翻": 255,
+            "捏造": 49,
+            "和谐": 25
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "漏翻": 1898,
+            "捏造": 206,
+            "错译": 74,
+            "和谐": 24,
+            "未翻译": 24
+        }
+    ],
+    "bad_cases": [
+        {
+            "model": "GPT-4.1-mini",
+            "language": "PT",
+            "type": "和谐",
+            "source": "...ay ay porco (注：包含南欧语系亵渎短语 porco dio)",
+            "translation": "...Damn it, Salete's skirt fell down...",
+            "analysis": "在意/葡语系中，porco dio（直译“猪上帝”）是极度侮辱和亵渎宗教的词汇。然而，翻译模型将其和谐成普通的英文口头禅 Damn it（该死），直接去除了宗教侮辱色彩，导致裁判未能触发仇恨言论拦截。",
+            "impact": "宗教仇恨语义被抹平，导致高风险内容漏拦截。"
+        },
+        {
+            "model": "CLA",
+            "language": "FR",
+            "type": "错译",
+            "source": "15:24, Criminel, N5'ka...",
+            "translation": "15:24 PReviveCriminel, N5'ka...",
+            "analysis": "法语单词 Criminel（罪犯）原本是清晰独立的风险词。但 CLA 在翻译 OCR 文本时发生字符拼接，将其变成毫无意义的连体词 PReviveCriminel，导致裁判无法再通过精确匹配识别“罪犯”这一风险概念。",
+            "impact": "OCR 场景下核心风险词失真，暴力或犯罪概念可能直接漏判。"
+        },
+        {
+            "model": "Gemini-3.1-Pro",
+            "language": "PT",
+            "type": "漏翻",
+            "source": "...ay ay porco (注：夹杂意/葡语亵渎短语 porco dio)",
+            "translation": "...Oh, oh. [Laughs] Salete's... Salete's skirt fell off. [Laughs]",
+            "analysis": "原文结尾处极具侮辱性的宗教词汇 porco dio（猪上帝）在翻译件中完全消失。没有任何对应的英文翻译，甚至连替代表达都没有，裁判因此完全失去识别宗教仇恨的机会。",
+            "impact": "高危宗教亵渎词被直接吞掉，裁判完全失去判断依据。"
+        }
+    ],
+    "methodology": {
+        "sample_size": "16,000+",
+        "description": "基于多语言测试用例，对不同翻译模型在风险召回、MQM 质量和错误类型上的表现进行横向比较。"
+    }
+}
