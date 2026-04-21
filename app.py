@@ -221,13 +221,16 @@ st.markdown(
     .section-header {{
         margin: 28px 0 12px 0;
     }}
-    .risk-card {{
+    .risk-card {
         background: #ffffff;
         border-radius: 12px;
         padding: 18px 20px;
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
         border-top: 4px solid {WARN};
         min-height: 116px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }}
     .case-card {{
         background: #ffffff;
@@ -293,16 +296,17 @@ st.markdown(
         color: {GRAY_TEXT};
         line-height: 1.6;
     }}
-    .risk-title {{
+    .risk-title {
         font-size: 16px;
         font-weight: 700;
         color: {GRAY_DARK};
         margin-bottom: 8px;
-    }}
-    .risk-text {{
+    }
+    .risk-text {
         font-size: 14px;
         color: {GRAY_TEXT};
         line-height: 1.6;
+        flex-grow: 1;
     }}
     .case-head {{
         background: rgba(220, 38, 38, 0.08);
@@ -821,7 +825,7 @@ for col, model in zip(defect_cols, MODEL_ORDER):
     with col:
         st.markdown(
             f"""
-<div class="risk-card">
+<div class="risk-card" style="margin-bottom: 0;">
     <div class="card-kicker">{model}</div>
     <div class="risk-title">{DEFECT_COPY[model]}</div>
     <div class="risk-text">总错误量 {fmt_int(total_errors)}，主问题为 {leaderboard_df[leaderboard_df['model'] == model].iloc[0]['main_error']}。</div>
@@ -830,11 +834,20 @@ for col, model in zip(defect_cols, MODEL_ORDER):
             unsafe_allow_html=True,
         )
 
+st.markdown(
+    """
+    <div style="margin-top: 32px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 15px; font-weight: 600; color: #374151;">🎯 错误类型深度筛选</span>
+        <span style="font-size: 12px; color: #4F46E5; background-color: #EEF2FF; padding: 3px 8px; border-radius: 6px; font-weight: 500; border: 1px solid #C7D2FE;">支持切换下拉框</span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 selected_error = st.selectbox(
     "错误类型筛选",
-    ["全部", "漏翻", "未翻译", "错译", "和谐", "捏造"],
+    ["全部"] + list(ERROR_COLORS.keys()),
     key="error_type_filter",
-    help="仅影响本模块的错误分布图。",
+    label_visibility="collapsed"
 )
 
 if selected_error != "全部":
