@@ -26,12 +26,6 @@ ERROR_COLORS = {
     "和谐": "#7C3AED",
     "捏造": "#334155",
 }
-DEFECT_COPY = {
-    "Gemini-3-Flash": "错译为主，但整体错误量最低",
-    "GPT-4.1-mini": "错译偏多，和谐类问题也偏高",
-    "CLA": "未翻译问题明显",
-    "Gemini-3.1-Pro": "漏翻失控",
-}
 
 
 st.set_page_config(
@@ -811,24 +805,33 @@ st.markdown('<div id="error-section" style="padding-top: 24px; margin-top: -24px
 st.markdown(
     """
 <div class="section-header">
-    <div class="section-title">主要失误类型</div>
-    <div class="section-desc">不同模型的失败方式并不相同。是否适合上线，取决于它最容易在哪一种错误上失控。</div>
+    <div class="section-title">主要失误类型 (全盘缺陷画像)</div>
+    <div class="section-desc">打破单模型视角的局限，从“最频发的缺陷”切入，定位不同错误类型的“重灾区”模型，为大批量模型引入提供稳定的对比基准。</div>
 </div>
 """,
     unsafe_allow_html=True,
 )
 
+# 动态计算全盘最严重的 Top 4 错误类型
+total_errors_by_type = error_long_df.groupby("错误类型")["数量"].sum().sort_values(ascending=False)
+top_4_errors = total_errors_by_type.head(4)
+
 defect_cols = st.columns(4)
-for col, model in zip(defect_cols, MODEL_ORDER):
-    model_error = error_df[error_df["model"] == model].iloc[0]
-    total_errors = int(model_error.drop(labels="model").sum())
+for col, (error_type, total_count) in zip(defect_cols, top_4_errors.items()):
+    # 找出在该错误上表现最差的模型
+    worst_model_row = error_long_df[error_long_df["错误类型"] == error_type].sort_values("数量", ascending=False).iloc[0]
+    worst_model = worst_model_row["model"]
+    worst_count = worst_model_row["数量"]
+    
+    pct = (worst_count / total_count * 100) if total_count > 0 else 0
+    
     with col:
         st.markdown(
             f"""
 <div class="risk-card" style="margin-bottom: 0;">
-    <div class="card-kicker">{model}</div>
-    <div class="risk-title">{DEFECT_COPY[model]}</div>
-    <div class="risk-text">总错误量 {fmt_int(total_errors)}，主问题为 {leaderboard_df[leaderboard_df['model'] == model].iloc[0]['main_error']}。</div>
+    <div class="card-kicker">Top 缺陷: {error_type}</div>
+    <div class="risk-title">重灾区：{worst_model}</div>
+    <div class="risk-text">总计 <b>{fmt_int(total_count)}</b> 例，其中 {worst_model} 贡献了 <b>{pct:.0f}%</b>（{fmt_int(worst_count)} 例）。</div>
 </div>
 """,
             unsafe_allow_html=True,
@@ -861,12 +864,12 @@ fig_error = px.bar(
     y="model",
     color="错误类型",
     orientation="h",
-    barmode="group",
+    barmode="stack",
     color_discrete_map=ERROR_COLORS,
     category_orders={"model": MODEL_ORDER},
 )
 fig_error.update_layout(
-    height=420,
+    height=max(400, len(MODEL_ORDER) * 40),
     margin=dict(l=0, r=0, t=12, b=0),
     paper_bgcolor="white",
     plot_bgcolor="white",
