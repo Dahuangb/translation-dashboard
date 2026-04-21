@@ -308,11 +308,36 @@ st.markdown(
     .case-body {{
         padding: 18px;
     }}
-    .case-grid {{
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+    .case-grid {
+        display: flex;
+        flex-direction: column;
         gap: 16px;
-    }}
+    }
+    @media (min-width: 768px) {
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+    }
+    .case-grid-vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .case-text-scrollable {
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+    /* 自定义滚动条样式 */
+    .case-text-scrollable::-webkit-scrollbar {
+        width: 6px;
+    }
+    .case-text-scrollable::-webkit-scrollbar-thumb {
+        background-color: #D1D5DB;
+        border-radius: 4px;
+    }
     .case-label {{
         font-size: 13px;
         color: {GRAY_MID};
@@ -1075,19 +1100,19 @@ else:
         {''.join(f'<span class="result-meta">{item}</span>' for item in selected_meta)}
         <div>{selected_patterns}</div>
         <div class="case-grid" style="margin-top: 14px;">
-            <div>
-                <div class="case-label">原文风险点</div>
-                <div class="case-text">{to_html_text(selected_record["source_text"])}</div>
+                <div>
+                    <div class="case-label">原文风险点</div>
+                    <div class="case-text case-text-scrollable">{to_html_text(selected_record["source_text"])}</div>
+                </div>
+                <div>
+                    <div class="case-label">错误译法</div>
+                    <div class="case-text case-text-scrollable">{to_html_text(selected_record["translation_text"])}</div>
+                </div>
+                <div>
+                    <div class="case-label">误译原因</div>
+                    <div class="case-text case-text-scrollable" style="max-height: 250px;">{reason_display}</div>
+                </div>
             </div>
-            <div>
-                <div class="case-label">错误译法</div>
-                <div class="case-text">{to_html_text(selected_record["translation_text"])}</div>
-            </div>
-            <div>
-                <div class="case-label">误译原因</div>
-                <div class="case-text">{reason_display}</div>
-            </div>
-        </div>
         <div class="case-strip">案例判断：{to_html_text(selected_record["overall_case_assessment"] or "该案例未提供额外总体判断。")}</div>
     </div>
 </div>
