@@ -200,10 +200,13 @@ st.markdown(
     .hero-card {{
         background: #ffffff;
         border-radius: 12px;
-        padding: 24px 28px;
+        padding: 24px 32px;
+        border-left: 6px solid #10B981;
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-        border-left: 6px solid {WIN};
-        margin-bottom: 16px;
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }}
     .metric-card {{
         background: #ffffff;
@@ -211,6 +214,7 @@ st.markdown(
         padding: 18px 20px;
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
         min-height: 110px;
+        margin-bottom: 24px;
     }}
     .section-header {{
         margin: 28px 0 12px 0;
@@ -431,6 +435,29 @@ st.markdown(
 )
 
 
+# ==============================================================================
+# Sidebar Navigation
+# ==============================================================================
+st.sidebar.markdown(
+    """
+    <div style="padding-bottom: 24px;">
+        <h2 style="font-size: 18px; color: #111827; margin-bottom: 16px;">导航目录</h2>
+        <a href="#hero-section" style="display: block; padding: 8px 12px; margin-bottom: 4px; color: #374151; text-decoration: none; border-radius: 6px; background-color: #F3F4F6;">1. 评估结论总览</a>
+        <a href="#performance-section" style="display: block; padding: 8px 12px; margin-bottom: 4px; color: #374151; text-decoration: none; border-radius: 6px; background-color: #F3F4F6;">2. 总体表现对比</a>
+        <a href="#language-section" style="display: block; padding: 8px 12px; margin-bottom: 4px; color: #374151; text-decoration: none; border-radius: 6px; background-color: #F3F4F6;">3. 跨语种稳定性</a>
+        <a href="#error-section" style="display: block; padding: 8px 12px; margin-bottom: 4px; color: #374151; text-decoration: none; border-radius: 6px; background-color: #F3F4F6;">4. 主要失误类型</a>
+        <a href="#case-section" style="display: block; padding: 8px 12px; margin-bottom: 4px; color: #374151; text-decoration: none; border-radius: 6px; background-color: #F3F4F6;">5. 高风险漏判案例</a>
+        <a href="#search-section" style="display: block; padding: 8px 12px; margin-bottom: 4px; color: #374151; text-decoration: none; border-radius: 6px; background-color: #F3F4F6;">6. 案例检索台</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ==============================================================================
+# Section 1: Hero (结论总览)
+# ==============================================================================
+st.markdown('<div id="hero-section"></div>', unsafe_allow_html=True)
+
 metric_cols = st.columns(4)
 hero_subtitle = (
     f"基于当前 5 个语言市场与本轮评测集，{winner} 在风险召回、翻译质量和语种稳定性上综合领先，当前更适合作为优先候选。"
@@ -476,10 +503,14 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ==============================================================================
+# Section 2: 总体对比
+# ==============================================================================
+st.markdown('<div id="performance-section" style="padding-top: 24px; margin-top: -24px;"></div>', unsafe_allow_html=True)
+
 st.markdown(
     """
 <div class="section-header">
-    <div class="scope-tag scope-tag-compare">全局比较</div>
     <div class="section-title">总体表现对比</div>
     <div class="section-desc">左侧回答“谁最能抓风险”，右侧回答“谁翻得最稳”。当前推荐模型不仅召回率领先，在高质量命中样本上也保持最稳。</div>
 </div>
@@ -638,10 +669,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown('<div id="language-section" style="padding-top: 24px; margin-top: -24px;"></div>', unsafe_allow_html=True)
+
 st.markdown(
     """
 <div class="section-header">
-    <div class="scope-tag scope-tag-compare">全局比较</div>
     <div class="section-title">跨语种稳定性</div>
     <div class="section-desc">重点不是某一个语种偶然跑得高，而是不同语言市场里是否持续稳定、不掉链子。稳定性评分仅作为辅助观察指标，计算方式为 100 - 语种召回波动。</div>
 </div>
@@ -668,7 +700,7 @@ for col, (title, text) in zip(stability_cards, stability_copy):
     with col:
         st.markdown(
             f"""
-<div class="risk-card">
+<div class="risk-card" style="margin-bottom: 0;">
     <div class="risk-title">{title}</div>
     <div class="risk-text">{text}</div>
 </div>
@@ -700,12 +732,22 @@ with stability_cols[0]:
     st.plotly_chart(fig_heat, use_container_width=True)
 
 with stability_cols[1]:
+    st.markdown(
+        """
+        <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 14px; font-weight: 600; color: #374151;">🎯 观察特定语种市场</span>
+            <span style="font-size: 12px; color: #6B7280; background-color: #F3F4F6; padding: 2px 6px; border-radius: 4px;">支持切换下拉框</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     selected_language = st.selectbox(
         "观察语种",
         language_options,
         index=default_language_index,
         key="stability_language",
         help="仅影响本模块的语种下钻图。",
+        label_visibility="collapsed",
     )
     selected_lang_df = lang_df[lang_df["language"] == selected_language].copy()
     best_recall = selected_lang_df["recall"].max()
@@ -745,10 +787,14 @@ with stability_cols[1]:
     )
     st.plotly_chart(fig_lang, use_container_width=True)
 
+# ==============================================================================
+# Section 4: 错误类型诊断
+# ==============================================================================
+st.markdown('<div id="error-section" style="padding-top: 24px; margin-top: -24px;"></div>', unsafe_allow_html=True)
+
 st.markdown(
     """
 <div class="section-header">
-    <div class="scope-tag scope-tag-compare">全局比较</div>
     <div class="section-title">主要失误类型</div>
     <div class="section-desc">不同模型的失败方式并不相同。是否适合上线，取决于它最容易在哪一种错误上失控。</div>
 </div>
@@ -805,10 +851,14 @@ fig_error.update_layout(
 )
 st.plotly_chart(fig_error, use_container_width=True)
 
+# ==============================================================================
+# Section 5: 典型案例证据
+# ==============================================================================
+st.markdown('<div id="case-section" style="padding-top: 24px; margin-top: -24px;"></div>', unsafe_allow_html=True)
+
 st.markdown(
     """
 <div class="section-header">
-    <div class="scope-tag scope-tag-compare">全局比较</div>
     <div class="section-title">高风险漏判案例</div>
     <div class="section-desc">先看一条代表性证据，再用筛选面板从 2,537 条 bad-case 里快速定位你想找的案例。</div>
 </div>
@@ -870,10 +920,11 @@ for case in other_cases:
             unsafe_allow_html=True,
         )
 
+st.markdown('<div id="search-section" style="padding-top: 24px; margin-top: -24px;"></div>', unsafe_allow_html=True)
+
 st.markdown(
     """
 <div class="section-header">
-    <div class="scope-tag scope-tag-deepdive">多模型深挖</div>
     <div class="section-title">翻译模型案例检索台</div>
     <div class="section-desc">这里已接入多模型 bad-case 数据。先选择翻译模型，再在该模型案例子集里按失败裁判、风险类型、来源字段、市场和关键词筛选。</div>
 </div>
