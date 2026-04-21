@@ -535,38 +535,75 @@ with overview_cols[0]:
     st.plotly_chart(fig_perf, use_container_width=True)
 
 with overview_cols[1]:
-    mqm_metrics = ["平均 MQM", "TP", "FN", "FP"]
-    subplot_titles = ["平均 MQM", "TP", "FN", "FP"]
-    # 增加水平间距以防止右侧图表的 Y 轴标签（模型名）覆盖左侧图表的数值
-    fig_mqm = make_subplots(rows=2, cols=2, subplot_titles=subplot_titles, vertical_spacing=0.22, horizontal_spacing=0.25)
-    for idx, metric in enumerate(mqm_metrics):
-        row = idx // 2 + 1
-        col = idx % 2 + 1
-        plot_df = mqm_df.sort_values(metric, ascending=False)
-        colors = [WIN if model == winner else GRAY_LIGHT for model in plot_df["model"]]
-        fig_mqm.add_trace(
-            go.Bar(
-                x=plot_df[metric],
-                y=plot_df["model"],
-                orientation="h",
-                marker_color=colors,
-                text=[fmt_num(v) for v in plot_df[metric]],
-                textposition="outside",
-                hovertemplate=f"%{{y}}<br>{metric}: %{{x:.1f}}<extra></extra>",
-                showlegend=False,
-            ),
-            row=row,
-            col=col,
+    fig_mqm = go.Figure()
+    
+    # 绘制堆叠/分组柱状图展示样本分布
+    fig_mqm.add_trace(
+        go.Bar(
+            x=mqm_df["model"],
+            y=mqm_df["TP"],
+            name="TP (正确)",
+            marker_color="#10B981", # 绿色代表正确
+            text=[fmt_num(v) for v in mqm_df["TP"]],
+            textposition="auto",
         )
-        fig_mqm.update_xaxes(range=[75, 100], row=row, col=col, gridcolor="#E5E7EB")
-        fig_mqm.update_yaxes(showgrid=False, row=row, col=col)
+    )
+    fig_mqm.add_trace(
+        go.Bar(
+            x=mqm_df["model"],
+            y=mqm_df["FN"],
+            name="FN (漏报)",
+            marker_color="#F59E0B", # 橙色代表漏报
+            text=[fmt_num(v) for v in mqm_df["FN"]],
+            textposition="auto",
+        )
+    )
+    fig_mqm.add_trace(
+        go.Bar(
+            x=mqm_df["model"],
+            y=mqm_df["FP"],
+            name="FP (误报)",
+            marker_color="#EF4444", # 红色代表误报
+            text=[fmt_num(v) for v in mqm_df["FP"]],
+            textposition="auto",
+        )
+    )
+
+    # 绘制平均 MQM 折线图 (使用副坐标轴)
+    fig_mqm.add_trace(
+        go.Scatter(
+            x=mqm_df["model"],
+            y=mqm_df["平均 MQM"],
+            name="平均 MQM",
+            mode="lines+markers+text",
+            marker=dict(color=BRAND, size=10),
+            line=dict(color=BRAND, width=3),
+            text=[fmt_num(v) for v in mqm_df["平均 MQM"]],
+            textposition="top center",
+            textfont=dict(color=BRAND, size=13, weight="bold"),
+            yaxis="y2"
+        )
+    )
 
     fig_mqm.update_layout(
-        title="翻译质量对比",
+        title="翻译质量综合分布 (MQM)",
         height=430,
-        margin=dict(l=0, r=24, t=52, b=0),
+        margin=dict(l=0, r=0, t=52, b=0),
         paper_bgcolor="white",
         plot_bgcolor="white",
+        barmode="group",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(title="样本数量", gridcolor="#E5E7EB"),
+        yaxis2=dict(
+            title="平均 MQM 分数",
+            overlaying="y",
+            side="right",
+            range=[60, 105], # 将范围调整到合适区间，避免折线被压得太扁
+            showgrid=False,
+            titlefont=dict(color=BRAND),
+            tickfont=dict(color=BRAND)
+        ),
     )
     st.plotly_chart(fig_mqm, use_container_width=True)
 
