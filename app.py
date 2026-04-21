@@ -596,12 +596,11 @@ with overview_cols[1]:
         xaxis=dict(showgrid=False),
         yaxis=dict(title="样本数量", gridcolor="#E5E7EB"),
         yaxis2=dict(
-            title="平均 MQM 分数",
+            title=dict(text="平均 MQM 分数", font=dict(color=BRAND)),
             overlaying="y",
             side="right",
             range=[60, 105], # 将范围调整到合适区间，避免折线被压得太扁
             showgrid=False,
-            titlefont=dict(color=BRAND),
             tickfont=dict(color=BRAND)
         ),
     )
