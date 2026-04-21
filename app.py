@@ -518,55 +518,33 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-selected_judge = st.selectbox(
-    "比较口径",
-    ["综合口径", "GPT-5 口径", "Gemini 口径"],
-    key="overview_judge",
-    help="仅影响本模块的总体表现图。",
-)
-
 overview_cols = st.columns(2)
 
 with overview_cols[0]:
-    if selected_judge == "综合口径":
-        fig_perf = go.Figure()
-        fig_perf.add_trace(
-            go.Bar(
-                x=overall_df["model"],
-                y=overall_df["GPT-5 口径"],
-                name="GPT-5 口径",
-                marker_color=BRAND,
-                text=[fmt_pct(v) for v in overall_df["GPT-5 口径"]],
-                textposition="outside",
-                hovertemplate="%{x}<br>GPT-5 口径: %{y:.1f}%<extra></extra>",
-            )
+    fig_perf = go.Figure()
+    fig_perf.add_trace(
+        go.Bar(
+            x=overall_df["model"],
+            y=overall_df["GPT-5 口径"],
+            name="GPT-5 口径",
+            marker_color=BRAND,
+            text=[fmt_pct(v) for v in overall_df["GPT-5 口径"]],
+            textposition="outside",
+            hovertemplate="%{x}<br>GPT-5 口径: %{y:.1f}%<extra></extra>",
         )
-        fig_perf.add_trace(
-            go.Bar(
-                x=overall_df["model"],
-                y=overall_df["Gemini 口径"],
-                name="Gemini 口径",
-                marker_color=WIN,
-                text=[fmt_pct(v) for v in overall_df["Gemini 口径"]],
-                textposition="outside",
-                hovertemplate="%{x}<br>Gemini 口径: %{y:.1f}%<extra></extra>",
-            )
+    )
+    fig_perf.add_trace(
+        go.Bar(
+            x=overall_df["model"],
+            y=overall_df["Gemini 口径"],
+            name="Gemini 口径",
+            marker_color=WIN,
+            text=[fmt_pct(v) for v in overall_df["Gemini 口径"]],
+            textposition="outside",
+            hovertemplate="%{x}<br>Gemini 口径: %{y:.1f}%<extra></extra>",
         )
-        winner_y = max(winner_overall["GPT-5 口径"], winner_overall["Gemini 口径"])
-    else:
-        bar_colors = [WIN if model == winner else GRAY_LIGHT for model in overall_df["model"]]
-        fig_perf = go.Figure(
-            go.Bar(
-                x=overall_df["model"],
-                y=overall_df[selected_judge],
-                marker_color=bar_colors,
-                text=[fmt_pct(v) for v in overall_df[selected_judge]],
-                textposition="outside",
-                hovertemplate=f"%{{x}}<br>{selected_judge}: %{{y:.1f}}%<extra></extra>",
-                showlegend=False,
-            )
-        )
-        winner_y = winner_overall[selected_judge]
+    )
+    winner_y = max(winner_overall["GPT-5 口径"], winner_overall["Gemini 口径"])
 
     fig_perf.add_annotation(
         x=winner,
@@ -708,84 +686,91 @@ for col, (title, text) in zip(stability_cards, stability_copy):
             unsafe_allow_html=True,
         )
 
-stability_cols = st.columns([1.2, 1])
+heatmap_df = lang_df.pivot(index="language", columns="model", values="recall").reindex(columns=MODEL_ORDER)
+fig_heat = px.imshow(
+    heatmap_df,
+    text_auto=".1f",
+    aspect="auto",
+    color_continuous_scale="RdYlGn",
+    zmin=50,
+    zmax=95,
+    labels=dict(x="模型", y="语种", color="召回率"),
+)
+fig_heat.update_layout(
+    title="各语种风险召回率",
+    height=400,
+    margin=dict(l=0, r=0, t=48, b=0),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    coloraxis_colorbar=dict(title="召回率"),
+)
+st.plotly_chart(fig_heat, use_container_width=True)
 
-with stability_cols[0]:
-    heatmap_df = lang_df.pivot(index="language", columns="model", values="recall").reindex(columns=MODEL_ORDER)
-    fig_heat = px.imshow(
-        heatmap_df,
-        text_auto=".1f",
-        aspect="auto",
-        color_continuous_scale="RdYlGn",
-        zmin=50,
-        zmax=95,
-        labels=dict(x="模型", y="语种", color="召回率"),
-    )
-    fig_heat.update_layout(
-        title="各语种风险召回率",
-        height=360,
-        margin=dict(l=0, r=0, t=48, b=0),
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-        coloraxis_colorbar=dict(title="召回率"),
-    )
-    st.plotly_chart(fig_heat, use_container_width=True)
+st.markdown("<hr style='margin: 32px 0; border: none; border-top: 1px solid #E5E7EB;'>", unsafe_allow_html=True)
 
-with stability_cols[1]:
-    st.markdown(
-        """
-        <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <span style="font-size: 14px; font-weight: 600; color: #374151;">🎯 观察特定语种市场</span>
-            <span style="font-size: 12px; color: #6B7280; background-color: #F3F4F6; padding: 2px 6px; border-radius: 4px;">支持切换下拉框</span>
+st.markdown(
+    """
+    <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 16px; font-weight: 600; color: #111827;">🎯 观察特定语种市场</span>
+        <span style="font-size: 13px; color: #4B5563; background-color: #E5E7EB; padding: 4px 8px; border-radius: 6px;">请点击下方选项进行切换</span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+selected_language = st.radio(
+    "观察语种",
+    language_options,
+    index=default_language_index,
+    key="stability_language",
+    horizontal=True,
+    label_visibility="collapsed",
+)
+
+selected_lang_df = lang_df[lang_df["language"] == selected_language].sort_values("recall", ascending=False)
+max_recall = selected_lang_df["recall"].max()
+min_recall = selected_lang_df["recall"].min()
+diff = max_recall - min_recall
+
+st.markdown(
+    f"""
+    <div class="metric-card" style="margin-top: 16px;">
+        <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px; color: #111827;">{selected_language} 市场诊断</div>
+        <div style="color: #4B5563; font-size: 14px; line-height: 1.6;">
+            {selected_language} 是当前对比中的重点观察语种，第一名与最后一名相差 <b>{diff:.1f}</b> 个点。
+            下面的条形图按“与第一名差距”排序，越靠下代表掉队越明显。
         </div>
-        """,
-        unsafe_allow_html=True
-    )
-    selected_language = st.selectbox(
-        "观察语种",
-        language_options,
-        index=default_language_index,
-        key="stability_language",
-        help="仅影响本模块的语种下钻图。",
-        label_visibility="collapsed",
-    )
-    selected_lang_df = lang_df[lang_df["language"] == selected_language].copy()
-    best_recall = selected_lang_df["recall"].max()
-    selected_lang_df["与第一名差距"] = best_recall - selected_lang_df["recall"]
-    selected_lang_df = selected_lang_df.sort_values(["与第一名差距", "recall"], ascending=[False, False])
-    language_gap = language_summary[language_summary["language"] == selected_language].iloc[0]["差距"]
-    st.markdown(
-        f"""
-<div class="risk-card" style="border-top-color:{RISK}; margin-bottom: 12px;">
-    <div class="risk-title">{selected_language} 市场诊断</div>
-    <div class="risk-text">{selected_language} 是当前对比中的重点观察语种，第一名与最后一名相差 {fmt_num(language_gap)} 个点。下面的条形图按“与第一名差距”排序，越靠上代表掉队越明显。</div>
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-    fig_lang = go.Figure()
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+fig_lang = go.Figure()
+for _, row in selected_lang_df.iterrows():
+    gap = max_recall - row["recall"]
+    color = WIN if row["model"] == winner else GRAY_LIGHT
+    text = f"{row['recall']:.1f}%" if gap == 0 else f"{row['recall']:.1f}% | 差 {gap:.1f}"
     fig_lang.add_trace(
         go.Bar(
-            x=selected_lang_df["recall"],
-            y=selected_lang_df["model"],
+            y=[row["model"]],
+            x=[row["recall"]],
             orientation="h",
-            marker_color=[WIN if model == winner else GRAY_LIGHT for model in selected_lang_df["model"]],
-            text=[f"{fmt_pct(r)}  |  差 {fmt_num(g)}" for r, g in zip(selected_lang_df["recall"], selected_lang_df["与第一名差距"])],
+            marker_color=color,
+            text=text,
             textposition="outside",
-            hovertemplate="%{y}<br>召回率: %{x:.1f}%<extra></extra>",
-            showlegend=False,
+            hovertemplate=f"%{{y}}<br>召回率: %{{x:.1f}}%<br>差距: {gap:.1f}<extra></extra>",
         )
     )
-    fig_lang.update_layout(
-        title="单语种下钻",
-        height=360,
-        margin=dict(l=0, r=48, t=48, b=0),
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-        xaxis=dict(range=[0, 115], gridcolor="#E5E7EB", title="召回率"),
-        yaxis=dict(showgrid=False, categoryorder="array", categoryarray=selected_lang_df["model"].tolist()),
-    )
-    st.plotly_chart(fig_lang, use_container_width=True)
+fig_lang.update_layout(
+    title="单语种下钻",
+    height=360,
+    margin=dict(l=0, r=48, t=48, b=0),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    xaxis=dict(range=[0, 115], gridcolor="#E5E7EB", title="召回率"),
+    yaxis=dict(showgrid=False, categoryorder="array", categoryarray=selected_lang_df["model"].tolist()[::-1]),
+    showlegend=False,
+)
+st.plotly_chart(fig_lang, use_container_width=True)
 
 # ==============================================================================
 # Section 4: 错误类型诊断
