@@ -100,8 +100,11 @@ error_df = pd.DataFrame(data["error_distribution"]).set_index("model").reindex(M
 error_long_df = error_df.melt(id_vars="model", var_name="错误类型", value_name="数量")
 
 winner = data["winner"]
-winner_row = leaderboard_df[leaderboard_df["model"] == winner].iloc[0]
-winner_overall = overall_df[overall_df["model"] == winner].iloc[0]
+winner_rows = leaderboard_df[leaderboard_df["model"] == winner]
+winner_row = winner_rows.iloc[0] if not winner_rows.empty else leaderboard_df.iloc[0]
+
+winner_overall_rows = overall_df[overall_df["model"] == winner]
+winner_overall = winner_overall_rows.iloc[0] if not winner_overall_rows.empty else overall_df.iloc[0]
 
 stability_df = (
     lang_df.groupby("model", as_index=False, observed=False)["recall"]
@@ -112,7 +115,8 @@ most_stable = stability_df.loc[stability_df["波动"].idxmin()]
 least_stable = stability_df.loc[stability_df["波动"].idxmax()]
 
 stability_df = stability_df.set_index("model").reindex(MODEL_ORDER).reset_index()
-winner_stability = stability_df[stability_df["model"] == winner].iloc[0]
+winner_stability_rows = stability_df[stability_df["model"] == winner]
+winner_stability = winner_stability_rows.iloc[0] if not winner_stability_rows.empty else stability_df.iloc[0]
 
 language_summary = (
     lang_df.groupby("language", as_index=False, observed=False)["recall"]
