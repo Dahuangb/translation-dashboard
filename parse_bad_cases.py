@@ -9,7 +9,7 @@ MARKET_CSV_PATH = Path("/Users/bytedance/Downloads/march_train_set.csv")
 # Global mapping for object_id -> market
 OBJECT_MARKET_MAP = {}
 SOURCES = {
-    "Gemini-3.1-Pro": ROOT / "translation_bad_cases_analysis_gemini3.1_pro.csv",
+    "Gemini-3.1-Pro": ROOT / "translation_bad_cases_analysis_gemini3.1_pro_new.csv",
     "GPT-4.1-mini": ROOT / "translation_bad_cases_analysis_gpt4.1_mini.csv",
     "CLA": ROOT / "translation_bad_cases_analysis_cla.csv",
     "Gemini-3.1-Flash": ROOT / "translation_bad_cases_analysis_gemini3.1_flash.csv",
