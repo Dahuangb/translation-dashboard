@@ -351,6 +351,9 @@ st.markdown(
         font-size: 14px;
         color: {GRAY_DARK};
         line-height: 1.7;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
     }}
     .case-strip {{
         margin-top: 16px;
