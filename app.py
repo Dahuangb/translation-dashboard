@@ -9,7 +9,7 @@ from plotly.subplots import make_subplots
 import streamlit as st
 
 
-MODEL_ORDER = ["Gemini-3-Flash", "GPT-4.1-mini", "CLA", "Gemini-3.1-Pro"]
+MODEL_ORDER = ["Gemini-3.1-Flash", "GPT-4.1-mini", "CLA", "Gemini-3.1-Pro"]
 BRAND = "#2563EB"
 WIN = "#10B981"
 RISK = "#DC2626"
@@ -1165,6 +1165,21 @@ else:
                     </ul>
                 </details>
             """
+        elif selected_record.get("failed_scope") == "双裁判" and len(reasons) > 1:
+            gemini_html = f"<li>{to_html_text(reasons[0])}</li>"
+            gpt_html = "".join([f"<li>{to_html_text(r)}</li>" for r in reasons[1:]])
+            reason_display = f"""
+                <div style='margin-top: 4px; font-weight: 500; font-size: 13px; color: #10B981;'>Gemini 评价</div>
+                <ul style='margin-top: 4px; padding-left: 20px; line-height: 1.6;'>
+                    {gemini_html}
+                </ul>
+                <details style='margin-top: 12px; cursor: pointer; color: #6B7280; font-size: 13px; background-color: #F3F4F6; padding: 8px; border-radius: 6px;'>
+                    <summary style='outline: none; font-weight: 500;'>▶ 查看 GPT-5 补充评价</summary>
+                    <ul style='margin-top: 8px; padding-left: 20px; line-height: 1.6; color: #4B5563; margin-bottom: 0;'>
+                        {gpt_html}
+                    </ul>
+                </details>
+            """
         elif len(reasons) > 1:
             reason_html = "".join([f"<li>{to_html_text(r)}</li>" for r in reasons])
             reason_display = f"<ul style='margin-top: 4px; padding-left: 20px; line-height: 1.6;'>{reason_html}</ul>"
@@ -1205,6 +1220,6 @@ with st.expander("方法说明"):
 - 样本规模：{data["methodology"]["sample_size"]}
 - 评估方式：{data["methodology"]["description"]}
 - 交互说明：顶部筛选会联动总体口径、语言下钻和错误类型图表。
-- bad-case 解析：当前已接入 `translation_bad_cases_analysis_gemini3.1_pro.csv` 与 `translation_bad_cases_analysis_gpt4.1_mini.csv`，并合并为多模型案例库供前端检索。
+- bad-case 解析：当前已接入所有模型（Gemini-3.1-Pro, GPT-4.1-mini, CLA, Gemini-3.1-Flash）的 bad-case 分析数据，并合并为多模型案例库供前端检索。
 """
     )
